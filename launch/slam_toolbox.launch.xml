@@ -1,0 +1,8 @@
+<launch>
+    <node name="slam_toolbox_node" pkg="slam_toolbox" exec="async_slam_toolbox_node">
+        <param from="$(find-pkg-share leo_nav)/config/slam_toolbox_config.yaml" />
+        <param name="enable_interactive_mode" value="false" />
+    </node>
+</launch>
+
+<!-- DONT FORGET TO CONFIGURE AND ACTIVATE LIFECYCLE-->
