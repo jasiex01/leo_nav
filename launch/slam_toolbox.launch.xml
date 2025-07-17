@@ -1,8 +1,18 @@
 <launch>
-    <node name="slam_toolbox_node" pkg="slam_toolbox" exec="async_slam_toolbox_node">
-        <param from="$(find-pkg-share leo_nav)/config/slam_toolbox_config.yaml" />
-        <param name="enable_interactive_mode" value="false" />
-    </node>
-</launch>
+  <node name="slam_toolbox_node"
+        pkg="slam_toolbox"
+        exec="async_slam_toolbox_node"
+        output="screen">
+    <param from="$(find-pkg-share leo_nav)/config/slam_toolbox_config.yaml" />
+    <param name="enable_interactive_mode" value="false" />
+  </node>
 
-<!-- DONT FORGET TO CONFIGURE AND ACTIVATE LIFECYCLE-->
+  <node name="lifecycle_manager_slam"
+        pkg="nav2_lifecycle_manager"
+        exec="lifecycle_manager"
+        output="screen">
+    <param name="autostart" value="true" />
+    <param name="node_names" value="['slam_toolbox_node']" />
+    <param name="bond_timeout" value="4.0" />
+  </node>
+</launch>

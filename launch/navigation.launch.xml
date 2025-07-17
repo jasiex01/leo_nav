@@ -2,6 +2,8 @@
 
   <let name="param_file" value="$(find-pkg-share leo_nav)/config/navigation.yaml" />
 
+  <include file="$(find-pkg-share leo_nav)/launch/slam_toolbox.launch.xml" />
+
   <node_container namespace=""
     name="navigation_container"
     pkg="rclcpp_components"
