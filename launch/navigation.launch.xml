@@ -2,7 +2,7 @@
 
   <let name="param_file" value="$(find-pkg-share leo_nav)/config/navigation.yaml" />
 
-  <include file="$(find-pkg-share leo_nav)/launch/slam_toolbox.launch.xml" />
+  <include file="$(find-pkg-share leo_nav)/launch/slam_toolbox.launch.py" />
 
   <node_container namespace=""
     name="navigation_container"
