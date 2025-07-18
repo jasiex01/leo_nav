@@ -127,7 +127,7 @@ global_costmap:
       inflation_layer:
         plugin: "nav2_costmap_2d::InflationLayer"
         cost_scaling_factor: 2.5
-        inflation_radius: 0.15
+        inflation_radius: 0.23
 
 local_costmap:
   local_costmap:
@@ -169,9 +169,9 @@ local_costmap:
           marking: true
           data_type: "LaserScan"
           raytrace_max_range: 10.0
-          raytrace_min_range: 0.2
+          raytrace_min_range: 0.15
           obstacle_max_range: 10.0
-          obstacle_min_range: 0.2
+          obstacle_min_range: 0.15
         #pointcloud:
         #  topic: /oak/points
         #  data_type: PointCloud2
@@ -193,7 +193,7 @@ local_costmap:
       inflation_layer:
         plugin: "nav2_costmap_2d::InflationLayer"
         cost_scaling_factor: 2.5
-        inflation_radius: 0.15
+        inflation_radius: 0.23
 
 planner_server:
   ros__parameters:
