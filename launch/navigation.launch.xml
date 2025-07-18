@@ -1,14 +1,35 @@
 <launch version="0.1.1">
 
-  <let name="param_file" value="$(find-pkg-share leo_nav)/config/navigation.yaml" />
+  <arg name="localization" 
+    default="false" 
+    description="Launch SLAM in localization mode" />
+  <arg name="slam_params_file" 
+    default="$(find-pkg-share leo_nav)/config/slam_toolbox_mapping_config.yaml"
+    description="Path to the SLAM parameters file" />
+  <arg name="map_file_name" 
+    default="$(find-pkg-share leo_nav)/maps/default_map.yaml"
+    description="Path to the map file" />
 
-  <include file="$(find-pkg-share leo_nav)/launch/slam_toolbox.launch.py" />
+  <arg name="navigation_params_file" 
+    default="$(find-pkg-share leo_nav)/config/navigation.yaml"
+    description="Path to the navigation parameters file" />
+
+  <include unless="$(var localization)"
+    file="$(find-pkg-share leo_nav)/launch/slam_toolbox_mapping.launch.py">
+    <arg name="slam_params_file" value="$(var slam_params_file)" />
+  </include>
+
+  <include if="$(var localization)"
+    file="$(find-pkg-share leo_nav)/launch/slam_toolbox_localization.launch.py">
+    <arg name="slam_params_file" value="$(var slam_params_file)" />
+    <arg name="map_file_name" value="$(var map_file_name)" />
+  </include>
 
   <node_container namespace=""
     name="navigation_container"
     pkg="rclcpp_components"
     exec="component_container_isolated">
-    <param from="$(var param_file)" />
+    <param from="$(var navigation_params_file)" />
 <!--
     <composable_node namespace=""
       name="oak"
@@ -33,14 +54,14 @@
       pkg="nav2_planner"
       plugin="nav2_planner::PlannerServer">
       <extra_arg name="use_intra_process_comms" value="true" />
-      <param from="$(var param_file)" />
+      <param from="$(var navigation_params_file)" />
     </composable_node>
 
     <composable_node name="controller_server"
       pkg="nav2_controller"
       plugin="nav2_controller::ControllerServer">
       <extra_arg name="use_intra_process_comms" value="true" />
-      <param from="$(var param_file)" />
+      <param from="$(var navigation_params_file)" />
     </composable_node>
 
     <composable_node name="bt_navigator"
@@ -50,22 +71,20 @@
         value="$(find-pkg-share leo_nav)/config/behavior_trees/navigate_w_replanning_time.xml" />
       <param name="default_nav_through_poses_bt_xml"
         value="$(find-pkg-share leo_nav)/config/behavior_trees/navigate_w_replanning_time.xml" />
-      <param from="$(var param_file)" />
+      <param from="$(var navigation_params_file)" />
     </composable_node>
 
     <composable_node name="waypoint_follower"
       pkg="nav2_waypoint_follower"
       plugin="nav2_waypoint_follower::WaypointFollower">
-      <param from="$(var param_file)" />
+      <param from="$(var navigation_params_file)" />
     </composable_node>
 
     <composable_node name="lifecycle_manager_navigation"
       pkg="nav2_lifecycle_manager"
       plugin="nav2_lifecycle_manager::LifecycleManager">
       <extra_arg name="use_intra_process_comms" value="true" />
-      <param from="$(var param_file)" />
+      <param from="$(var navigation_params_file)" />
     </composable_node>
-
   </node_container>
-
 </launch>
