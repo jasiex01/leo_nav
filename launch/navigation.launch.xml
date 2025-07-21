@@ -2,14 +2,17 @@
 
   <arg name="localization" 
     default="false" 
-    description="Launch SLAM in localization mode" />
-  <arg name="slam_mapping_params_file" 
-    default="$(find-pkg-share leo_nav)/config/slam_toolbox_mapping_config.yaml"
+    description="Whether to use SLAM Toolbox in mapping mode or AMCL for localization only" />
+  
+  <arg name="slam_params_file" 
+    default="$(find-pkg-share leo_nav)/config/slam_toolbox.yaml"
     description="Path to the SLAM parameters file (used if localization is false)" />
-  <arg name="slam_localization_params_file" 
-    default="$(find-pkg-share leo_nav)/config/slam_toolbox_localization_config.yaml"
-    description="Path to the SLAM parameters file (used if localization is true)" />
-  <arg name="map_file_name" 
+  
+  <arg name="amcl_params_file" 
+    default="$(find-pkg-share leo_nav)/config/amcl.yaml"
+    description="Path to the AMCL parameters file (used if localization is true)" />
+  
+  <arg name="map_file"
     default="$(find-pkg-share leo_nav)/maps/default_map.yaml"
     description="Path to the map file" />
 
@@ -18,14 +21,14 @@
     description="Path to the navigation parameters file" />
 
   <include unless="$(var localization)"
-    file="$(find-pkg-share leo_nav)/launch/slam_toolbox_mapping.launch.py">
-    <arg name="slam_params_file" value="$(var slam_mapping_params_file)" />
+    file="$(find-pkg-share leo_nav)/launch/slam_toolbox.launch.py">
+    <arg name="params_file" value="$(var slam_params_file)" />
   </include>
 
   <include if="$(var localization)"
-    file="$(find-pkg-share leo_nav)/launch/slam_toolbox_localization.launch.py">
-    <arg name="slam_params_file" value="$(var slam_localization_params_file)" />
-    <arg name="map_file_name" value="$(var map_file_name)" />
+    file="$(find-pkg-share leo_nav)/launch/amcl.launch.py">
+    <arg name="params_file" value="$(var amcl_params_file)" />
+    <arg name="map_file" value="$(var map_file)" />
   </include>
 
   <node_container namespace=""

@@ -13,17 +13,17 @@ from lifecycle_msgs.msg import Transition
 
 
 def generate_launch_description():
-    slam_params_file = LaunchConfiguration('slam_params_file')
+    params_file = LaunchConfiguration('params_file')
 
-    declare_slam_params_file_cmd = DeclareLaunchArgument(
-        'slam_params_file',
+    declare_params_file_cmd = DeclareLaunchArgument(
+        'params_file',
         default_value=os.path.join(get_package_share_directory("leo_nav"),
-                                   'config', 'slam_toolbox_mapping_config.yaml'),
+                                   'config', 'slam_toolbox.yaml'),
         description='Full path to the ROS2 parameters file to use for the slam_toolbox node')
 
     start_async_slam_toolbox_node = LifecycleNode(
         parameters=[
-          slam_params_file,
+          params_file,
         ],
         package='slam_toolbox',
         executable='async_slam_toolbox_node',
@@ -56,7 +56,7 @@ def generate_launch_description():
 
     ld = LaunchDescription()
 
-    ld.add_action(declare_slam_params_file_cmd)
+    ld.add_action(declare_params_file_cmd)
     ld.add_action(start_async_slam_toolbox_node)
     ld.add_action(configure_event)
     ld.add_action(activate_event)
