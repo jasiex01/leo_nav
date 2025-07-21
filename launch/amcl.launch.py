@@ -5,8 +5,8 @@ from launch import LaunchDescription
 from launch.actions import (DeclareLaunchArgument, EmitEvent, LogInfo,
                             RegisterEventHandler)
 from launch.events import matches_action
-from launch.substitutions import (LaunchConfiguration)
-from launch_ros.actions import LifecycleNode, Node
+from launch.substitutions import LaunchConfiguration
+from launch_ros.actions import LifecycleNode
 from launch_ros.event_handlers import OnStateTransition
 from launch_ros.events.lifecycle import ChangeState
 from lifecycle_msgs.msg import Transition
@@ -31,10 +31,8 @@ def generate_launch_description():
         ),
         description='Full path to the map YAML file to load')
 
-    start_amcl_node = Node(
-        parameters=[
-          params_file,
-        ],
+    start_amcl_node = LifecycleNode(
+        parameters=[params_file],
         package='nav2_amcl',
         executable='amcl',
         name='amcl_node',
@@ -75,6 +73,30 @@ def generate_launch_description():
         )
     )
 
+    configure_amcl = EmitEvent(
+        event=ChangeState(
+            lifecycle_node_matcher=matches_action(start_amcl_node),
+            transition_id=Transition.TRANSITION_CONFIGURE
+        )
+    )
+
+    activate_amcl = RegisterEventHandler(
+        OnStateTransition(
+            target_lifecycle_node=start_amcl_node,
+            start_state='configuring',
+            goal_state='inactive',
+            entities=[
+                LogInfo(msg='[LifecycleLaunch] Activating AMCL node.'),
+                EmitEvent(
+                    event=ChangeState(
+                        lifecycle_node_matcher=matches_action(start_amcl_node),
+                        transition_id=Transition.TRANSITION_ACTIVATE
+                    )
+                )
+            ]
+        )
+    )
+
     ld = LaunchDescription()
 
     ld.add_action(declare_params_file_cmd)
@@ -83,6 +105,7 @@ def generate_launch_description():
     ld.add_action(start_map_server_node)
     ld.add_action(configure_map_server)
     ld.add_action(activate_map_server)
-    ld.add_action(declare_map_file_cmd)
+    ld.add_action(configure_amcl)
+    ld.add_action(activate_amcl)
 
     return ld
