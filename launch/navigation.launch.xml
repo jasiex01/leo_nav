@@ -11,10 +11,9 @@
   <arg name="amcl_params_file" 
     default="$(find-pkg-share leo_nav)/config/amcl.yaml"
     description="Path to the AMCL parameters file (used if localization is true)" />
-  
-  <arg name="map_file"
-    default="$(find-pkg-share leo_nav)/maps/default_map.yaml"
-    description="Path to the map file" />
+
+  <arg name="map_file" 
+    description="Path to the map file (required for AMCL - when localization is true)" />
 
   <arg name="navigation_params_file" 
     default="$(find-pkg-share leo_nav)/config/navigation.yaml"

@@ -24,12 +24,8 @@ def generate_launch_description():
     
     declare_map_file_cmd = DeclareLaunchArgument(
         'map_file',
-        default_value=os.path.join(
-            get_package_share_directory("leo_nav"),
-            'maps',
-            'default_map.yaml'
-        ),
-        description='Full path to the map YAML file to load')
+        description='Full path to the map YAML file to load (required for AMCL)',
+    )
 
     start_amcl_node = LifecycleNode(
         parameters=[params_file],
