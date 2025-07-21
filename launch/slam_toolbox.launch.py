@@ -45,7 +45,7 @@ def generate_launch_description():
             start_state="configuring",
             goal_state="inactive",
             entities=[
-                LogInfo(msg="[LifecycleLaunch] Slamtoolbox node is activating."),
+                LogInfo(msg="[LifecycleLaunch] Slam Toolbox node is activating."),
                 EmitEvent(event=ChangeState(
                     lifecycle_node_matcher=matches_action(start_async_slam_toolbox_node),
                     transition_id=Transition.TRANSITION_ACTIVATE
