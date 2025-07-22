@@ -16,9 +16,17 @@
     default="$(find-pkg-share leo_nav)/maps/empty_map.yaml"
     description="Path to the map file (required for AMCL - when localization is true)" />
 
-  <arg name="navigation_params_file" 
+  <arg name="use_stereo_camera" 
+    default="false"
+    description="Whether to enable stereo camera nodes" />
+
+  <arg unless="$(var use_stereo_camera)" name="navigation_params_file"
     default="$(find-pkg-share leo_nav)/config/navigation.yaml"
-    description="Path to the navigation parameters file" />
+    description="Standard navigation config" />
+
+  <arg if="$(var use_stereo_camera)" name="navigation_params_file"
+    default="$(find-pkg-share leo_nav)/config/navigation_stereo_camera.yaml"
+    description="Stereo-camera-based navigation config" />
 
   <include unless="$(var localization)"
     file="$(find-pkg-share leo_nav)/launch/slam_toolbox.launch.py">
@@ -36,8 +44,9 @@
     pkg="rclcpp_components"
     exec="component_container_isolated">
     <param from="$(var navigation_params_file)" />
-<!--
-    <composable_node namespace=""
+
+    <composable_node if="$(var use_stereo_camera)"
+      namespace=""
       name="oak"
       pkg="depthai_ros_driver"
       plugin="depthai_ros_driver::Camera">
@@ -45,7 +54,8 @@
       <param from="/etc/ros/config/oak.yaml" />
     </composable_node>
 
-    <composable_node name="pointcloud_xyzi"
+    <composable_node if="$(var use_stereo_camera)"
+      name="pointcloud_xyzi"
       pkg="depth_image_proc"
       plugin="depth_image_proc::PointCloudXyzNode">
       <param name="queue_size" value="1" />
@@ -55,7 +65,7 @@
       <remap from="points" to="/oak/points" />
       <extra_arg name="use_intra_process_comms" value="true" />
     </composable_node>
--->
+
     <composable_node name="planner_server"
       pkg="nav2_planner"
       plugin="nav2_planner::PlannerServer">
