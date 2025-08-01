@@ -38,7 +38,7 @@ controller_server:
       movement_time_allowance: 5.0
 
     general_goal_checker:
-      stateful: true
+      stateful: false
       plugin: "nav2_controller::SimpleGoalChecker"
       xy_goal_tolerance: 0.20
       yaw_goal_tolerance: 0.30
@@ -64,21 +64,21 @@ controller_server:
       vx_samples: 20
       vy_samples: 5
       vtheta_samples: 20
-      linear_granularity: 0.5
-      angular_granularity: 0.025
+      linear_granularity: 0.05
+      angular_granularity: 0.017
       transform_tolerance: 0.2
       xy_goal_tolerance: 0.25
       short_circuit_trajectory_evaluation: true
       limit_vel_cmd_in_traj: false
-      stateful: false
+      stateful: true
       critics: ["RotateToGoal", "Oscillation", "BaseObstacle", "GoalAlign", "PathAlign", "PathDist", "GoalDist"]
       BaseObstacle.scale: 0.02
-      PathAlign.scale: 32.0
-      GoalAlign.scale: 24.0
-      PathAlign.forward_point_distance: 0.1
-      GoalAlign.forward_point_distance: 0.1
-      PathDist.scale: 32.0
-      GoalDist.scale: 24.0
+      PathAlign.scale: 64.0
+      GoalAlign.scale: 8.0
+      PathAlign.forward_point_distance: 0.325
+      GoalAlign.forward_point_distance: 0.325
+      PathDist.scale: 64.0
+      GoalDist.scale: 8.0
       RotateToGoal.scale: 32.0
       RotateToGoal.slowing_factor: 1.0
       RotateToGoal.lookahead_time: -1.0
