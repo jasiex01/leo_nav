@@ -66,19 +66,19 @@ controller_server:
       vtheta_samples: 20
       linear_granularity: 0.05
       angular_granularity: 0.017
-      transform_tolerance: 0.2
+      transform_tolerance: 0.5
       xy_goal_tolerance: 0.25
       short_circuit_trajectory_evaluation: true
       limit_vel_cmd_in_traj: false
-      stateful: true
+      stateful: false
       critics: ["RotateToGoal", "Oscillation", "BaseObstacle", "GoalAlign", "PathAlign", "PathDist", "GoalDist"]
-      BaseObstacle.scale: 0.02
-      PathAlign.scale: 64.0
-      GoalAlign.scale: 8.0
+      BaseObstacle.scale: 0.2
+      PathAlign.scale: 32.0
+      GoalAlign.scale: 4.0
       PathAlign.forward_point_distance: 0.325
       GoalAlign.forward_point_distance: 0.325
-      PathDist.scale: 64.0
-      GoalDist.scale: 8.0
+      PathDist.scale: 32.0
+      GoalDist.scale: 4.0
       RotateToGoal.scale: 32.0
       RotateToGoal.slowing_factor: 1.0
       RotateToGoal.lookahead_time: -1.0
@@ -101,7 +101,7 @@ global_costmap:
 
       global_frame: "map"
       robot_base_frame: "base_footprint"
-      transform_tolerance: 0.3
+      transform_tolerance: 0.5
       footprint_padding: 0.01
       footprint: "[[0.22, 0.22], [0.22, -0.22], [-0.22, -0.22], [-0.22, 0.22]]"
 
@@ -118,8 +118,7 @@ global_costmap:
         map_subscribe_transient_local: true
         enabled: true
         subscribe_to_updates: true
-        transform_tolerance: 0.1
-          
+        transform_tolerance: 0.5
       denoise_layer:
         plugin: "nav2_costmap_2d::DenoiseLayer"
         enabled: True
@@ -145,7 +144,7 @@ local_costmap:
 
       global_frame: "odom"
       robot_base_frame: "base_footprint"
-      transform_tolerance: 0.3
+      transform_tolerance: 0.5
       footprint_padding: 0.01
       footprint: "[[0.22, 0.22], [0.22, -0.22], [-0.22, -0.22], [-0.22, 0.22]]"
 
