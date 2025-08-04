@@ -46,15 +46,6 @@
     <param from="$(var navigation_params_file)" />
 
     <composable_node if="$(var use_stereo_camera)"
-      namespace=""
-      name="oak"
-      pkg="depthai_ros_driver"
-      plugin="depthai_ros_driver::Camera">
-      <extra_arg name="use_intra_process_comms" value="true" />
-      <param from="/etc/ros/config/oak.yaml" />
-    </composable_node>
-
-    <composable_node if="$(var use_stereo_camera)"
       name="pointcloud_xyz_node"
       pkg="depth_image_proc"
       plugin="depth_image_proc::PointCloudXyzNode">
